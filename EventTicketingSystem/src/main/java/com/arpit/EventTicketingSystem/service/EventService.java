@@ -49,6 +49,7 @@ public class EventService {
         event.setTime(eventDto.getTime());
         event.setSeatsAvailable(eventDto.getSeatsAvailable());
         event.setPrice(eventDto.getPrice());
+        System.out.println("Event Processed");
         return er.save(event);
     }
 
