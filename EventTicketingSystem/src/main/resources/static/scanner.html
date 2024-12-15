@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Scanner</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.0.4/html5-qrcode.min.js"></script>
+    <script>
+        function onScanSuccess(decodedText, decodedResult) {
+            console.log("Scan success:", decodedText, decodedResult);
+            // Send decodedText to backend for validation
+            fetch('/api/validate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ qrCode: decodedText })
+            }).then(response => response.json())
+                .then(data => {
+                    console.log('Validation response:', data);
+                });
+        }
+
+        function onScanFailure(error) {
+            console.error("Scan error:", error);
+        }
+
+        function startScan() {
+            html5Qrcode.start(
+                { facingMode: "environment" },
+                { fps: 10, qrbox: {width: 250, height: 250} },
+                onScanSuccess,
+                onScanFailure
+            );
+        }
+    </script>
+</head>
+<body onload="startScan()">
+<h1>Scan QR Code</h1>
+<div id="reader" style="width: 300px; height: 300px;"></div>
+</body>
+</html>
